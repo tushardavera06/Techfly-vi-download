@@ -38,7 +38,6 @@ async def check_force_sub(client: Client, message: Message) -> bool:
         if member.status in ("banned", "kicked"):
             await message.reply_text(
                 "🚫 Aap channel se banned ho, bot use nahi kar sakte.",
-                parse_mode=None,
             )
             return False
 
@@ -70,7 +69,6 @@ async def check_force_sub(client: Client, message: Message) -> bool:
             "📌 Pehle hamare channel ko join karo,\n"
             "phir bot use kar sakte ho. 🙂",
             reply_markup=InlineKeyboardMarkup(buttons),
-            parse_mode=None,
         )
         return False
 
@@ -135,7 +133,7 @@ async def start_handler(client: Client, message: Message):
         "✅ Audio + Video hamesha sath me (no mute video)."
     )
 
-    await message.reply_text(text, parse_mode=None)
+    await message.reply_text(text)
 
 
 # ------------- URL Handler (YouTube link) -------------
@@ -150,7 +148,6 @@ async def url_handler(client: Client, message: Message):
         return await message.reply_text(
             "❌ Abhi sirf YouTube link support hai.\n"
             "Baad me TikTok / Insta bhi add kar denge. 🙂",
-            parse_mode=None,
         )
 
     if not await check_force_sub(client, message):
@@ -158,7 +155,6 @@ async def url_handler(client: Client, message: Message):
 
     msg = await message.reply_text(
         "🔍 Info la raha hoon, please wait…",
-        parse_mode=None,
     )
 
     try:
@@ -166,13 +162,11 @@ async def url_handler(client: Client, message: Message):
     except Exception as e:
         return await msg.edit_text(
             f"❌ Info fetch nahi ho payi:\n{e}",
-            parse_mode=None,
         )
 
     if not formats:
         return await msg.edit_text(
             "❌ Koi valid audio+video format nahi mila.",
-            parse_mode=None,
         )
 
     title = info.get("title", "Unknown Title")
@@ -213,7 +207,6 @@ async def url_handler(client: Client, message: Message):
     await msg.edit_text(
         f"✅ Available formats for:\n{title}",
         reply_markup=InlineKeyboardMarkup(buttons),
-        parse_mode=None,
     )
 
 
@@ -231,7 +224,6 @@ async def joined_refresh(client: Client, callback_query: CallbackQuery):
             await callback_query.edit_message_text(
                 "✅ Dhanyavaad! Ab aap bot use kar sakte ho.\n"
                 "Mujhe koi YouTube link bhejo. 🙂",
-                parse_mode=None,
             )
     except Exception:
         # Agar kuch bhi error aaya to ignore kar dete hain
@@ -255,12 +247,10 @@ async def format_callback(client: Client, callback_query: CallbackQuery):
     if not url:
         return await msg.edit_text(
             "❌ URL expire ho gaya. Dobara link bhejo.",
-            parse_mode=None,
         )
 
     await msg.edit_text(
         "⬇️ Download ho raha hai, please wait…",
-        parse_mode=None,
     )
 
     # Download with audio+video merge
@@ -285,7 +275,6 @@ async def format_callback(client: Client, callback_query: CallbackQuery):
     except Exception as e:
         return await msg.edit_text(
             f"❌ Download error:\n{e}",
-            parse_mode=None,
         )
 
     # Send file to user
@@ -293,7 +282,6 @@ async def format_callback(client: Client, callback_query: CallbackQuery):
         title = (info or {}).get("title", "Video")
         await msg.edit_text(
             "📤 Telegram par bhej raha hoon…",
-            parse_mode=None,
         )
         await msg.reply_video(
             video=file_path,
@@ -303,7 +291,6 @@ async def format_callback(client: Client, callback_query: CallbackQuery):
     except Exception as e:
         await msg.edit_text(
             f"❌ Send error:\n{e}",
-            parse_mode=None,
         )
 
     # Cleanup
