@@ -134,7 +134,7 @@ async def url_handler(client: Client, message: Message):
     try:
         info, formats = get_video_info(text)
     except Exception as e:
-        await msg.edit_text(f"❌ Info fetch nahi ho payi:\n`{e}`", parse_mode="markdown")
+        await msg.edit_text(f"❌ Info fetch nahi ho payi:\n`{e}`")
         return
 
     if not formats:
@@ -181,7 +181,6 @@ async def url_handler(client: Client, message: Message):
     await msg.edit_text(
         f"🎬 *{title}*\n\nQuality choose karo:",
         reply_markup=InlineKeyboardMarkup(buttons),
-        parse_mode="markdown",
     )
 
 
@@ -234,7 +233,7 @@ async def format_callback(client: Client, callback_query: CallbackQuery):
             info = ydl.extract_info(url, download=True)
             file_path = ydl.prepare_filename(info)
     except Exception as e:
-        return await msg.edit_text(f"❌ Download error:\n`{e}`", parse_mode="markdown")
+        return await msg.edit_text(f"❌ Download error:\n`{e}`")
 
     # Send file to user
     try:
@@ -246,7 +245,7 @@ async def format_callback(client: Client, callback_query: CallbackQuery):
         )
         await msg.delete()
     except Exception as e:
-        await msg.edit_text(f"❌ Send error:\n`{e}`", parse_mode="markdown")
+        await msg.edit_text(f"❌ Send error:\n`{e}`")
 
     # Cleanup
     try:
